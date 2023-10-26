@@ -8,15 +8,21 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.min.css" rel="stylesheet">    
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
+            .h1 {
+                letter-spacing: -0.02em;
+            }
             .dropzone {
                 overflow-y: auto;
-                padding: 10px 10px 0 !important;
+                border: 0;
+                background: transparent;
             }
             .dz-preview {
                 width: 100%;
                 margin: 0 !important;
                 height: 100%;
-                padding: 20px;
+                padding: 15px;
+                position: absolute !important;
+                top: 0;
             }
             .dz-photo {
                 height: 100%;
@@ -24,6 +30,10 @@
                 overflow: hidden;
                 border-radius: 12px;
                 background: #eae7e2;
+            }
+            .dz-drag-hover .dropzone-drag-area {
+                border-style: solid;
+                border-color: #86b7fe;;
             }
             .dz-thumbnail {
                 width: 100%;
@@ -41,7 +51,6 @@
             .dz-delete {
                 width: 24px;
                 height: 24px;
-                cursor: pointer;
                 background: rgba(0, 0, 0, 0.57);
                 position: absolute;
                 opacity: 0;
@@ -56,6 +65,7 @@
             }
             .dz-delete > svg {
                 transform: scale(0.75);
+                cursor: pointer;
             }
             .dz-preview:hover .dz-delete, .dz-preview:hover .dz-remove-image {
                 opacity: 1;
@@ -81,40 +91,40 @@
         <!-- Form container -->
         <div class="container-md mt-5">
             <div class="col-xxl-5 col-xl-6 col-lg-8 mx-auto">
-                <h1 class="fw-bold mb-5">Laravel 10 dropzone image upload with other form fields and validation</h1>
+                <h1 class="h1 fw-bold mb-5">Laravel 10 dropzone image upload with other form fields and validation</h1>
                 @if(session()->has('message'))
                     <div class="alert alert-success mb-4">{{ session()->get('message') }}</div>
                 @endif
-                <form class="dropzone" id="formDropzone" method="POST" enctype="multipart/form-data" novalidate>
+                <form class="dropzone overflow-visible p-0" id="formDropzone" method="POST" enctype="multipart/form-data" novalidate>
                     @csrf
                     <div class="form-group mb-3">
                         <label class="form-label text-muted opacity-75 fw-medium" for="formName">Name</label>
-                        <input class="form-control p-3 fw-bold @error('name') is-invalid @enderror" id="formName" name="name" value="{{ old('name') }}" type="text" required>
+                        <input class="form-control border-2 shadow-none fw-bold @error('name') is-invalid @enderror p-3" id="formName" name="name" value="{{ old('name') }}" type="text" required>
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label text-muted opacity-75 fw-medium" for="formEmail">Email</label>
-                        <input class="form-control p-3 fw-bold @error('email') is-invalid @enderror" id="formEmail" name="email" value="{{ old('email') }}" type="email" required>
+                        <input class="form-control border-2 shadow-none fw-bold @error('email') is-invalid @enderror p-3" id="formEmail" name="email" value="{{ old('email') }}" type="email" required>
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group mb-4">
                         <label class="form-label text-muted opacity-75 fw-medium" for="formImage">Image</label>
-                        <div class="dropzone-drag-area form-control">
+                        <div class="dropzone-drag-area form-control" id="previews">
                             <div class="dz-message text-muted opacity-50" data-dz-message>
                                 <span>Drag file here to upload</span>
-                            </div>
-                        </div>
-                        <div class="d-none" id="dzPreviewContainer">
-                            <div class="eeee dz-preview dz-file-preview">
-                                <div class="dz-photo">
-                                    <img class="dz-thumbnail" data-dz-thumbnail>
-                                </div>
-                                <div class="dz-delete" data-dz-remove>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="times"><path fill="#FFFFFF" d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"></path></svg>
+                            </div>    
+                            <div class="d-none" id="dzPreviewContainer">
+                                <div class="dz-preview dz-file-preview">
+                                    <div class="dz-photo">
+                                        <img class="dz-thumbnail" data-dz-thumbnail>
+                                    </div>
+                                    <button class="dz-delete border-0 p-0" type="button" data-dz-remove>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="times"><path fill="#FFFFFF" d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"></path></svg>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -142,6 +152,7 @@
                 acceptedFiles: '.jpeg, .jpg, .png, .gif',
                 thumbnailWidth: 900,
                 thumbnailHeight: 600,
+                previewsContainer: "#previews",
                
                 init: function() 
                 {
