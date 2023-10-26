@@ -7,4 +7,4 @@ use App\Http\Controllers\FormController;
 Route::get('/form', [FormController::class, 'indexForm' ]);
 
 // handle form request
-Route::post('/form-submit', [FormController::class, 'submitForm' ])->name('form.submit');
+Route::post('/form-submit', [FormController::class, 'submitForm' ]);
