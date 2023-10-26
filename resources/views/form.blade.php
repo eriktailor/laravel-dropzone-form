@@ -67,7 +67,8 @@
                 transform: scale(0.75);
                 cursor: pointer;
             }
-            .dz-preview:hover .dz-delete, .dz-preview:hover .dz-remove-image {
+            .dz-preview:hover .dz-delete, 
+            .dz-preview:hover .dz-remove-image {
                 opacity: 1;
             }
             .dz-message {
@@ -93,7 +94,7 @@
     <body class="bg-light">
 
         <!-- Form container -->
-        <div class="container-md mt-5">
+        <div class="container-md my-5">
             <div class="col-xxl-5 col-xl-6 col-lg-8 mx-auto">
                 <h1 class="h1 fw-bold mb-5">Laravel 10 dropzone image upload with other form fields and validation</h1>
                 <div class="alert alert-success d-none mb-4" id="successMessage">The form was submitted successfully.</div>
